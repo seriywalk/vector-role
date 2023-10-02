@@ -9,9 +9,7 @@ Role Variables
 | vars | description |
 |-------|--------------|
 | vector_installer_url | packages of vector |
-|-------|--------------|
 | vector_config | configuration  |
-|-------|--------------|
 
 Example Playbook
 ----------------
