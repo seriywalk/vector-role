@@ -1,6 +1,47 @@
 ---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: docker
+lint: |
+  ansible-lint
+  yamllint .
 platforms:
-  - name: instance
-    # you might want to add your own variables here based on what provisioning
-    # you are doing like:
-    # image: quay.io/centos/centos:stream8
+  - name: centos_7
+    image: pycontribs/centos:7
+    command: /usr/sbin/init
+    capabilities:
+      - SYS_ADMIN
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: centos_8
+    image: quay.io/centos/centos:stream8
+    command: /sbin/init
+    capabilities:
+      - SYS_ADMIN
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  options:
+    vvv: true
+    D: true
+  inventory:
+    hosts:
+      all:
+    group_vars:
+      all:
+        vector_dir: "/tmp/vector"
+    host_vars:
+      centos_7:
+      centos_8:
+        ansible_user: ansible
+verifier:
+  name: ansible
